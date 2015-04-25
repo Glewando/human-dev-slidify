@@ -1,0 +1,81 @@
+---
+title       : "Indicators of Human Development"
+subtitle    : (from the 2014 Human Development Report)
+author      : G. Lewandowski 
+framework   : io2012        
+highlighter : highlight.js  
+hitheme     : tomorrow       
+widgets     : [bootstrap]    
+mode        : selfcontained 
+knit        : slidify::knit2slides
+---
+
+## What is Human Development
+From the [United Nations Development Programme, 
+Human Development Report Office](http://hdr.undp.org/en/humandev):  
+
+"2015 marks 25 years since the first Human Development Report introduced a new approach for advancing human wellbeing. Human development - or the human development approach - is about expanding the richness of human life, rather than simply the richness of the economy in which human beings live. It is an approach that is focused on people and their opportunities and choices."
+
+### Human Development Index (HDI):
+Is a summary measure of three central aspects of human development:  
+1. a long and healthy life (Life Expectancy)       
+2. access to knowledge (Education Index)   
+3. a decent standard of living (GNI Index)  
+
+The details for the [HDI calculation](http://hdr.undp.org/sites/default/files/hdr14_technical_notes.pdf) and the full [2014 Human Development Report](http://hdr.undp.org/sites/default/files/hdr14-report-en-1.pdf) are on the [United Nations Development Program](http://hdr.undp.org/en) website.
+
+--- .class #id 
+
+## HD Interactive Data-Exploration Application
+### Description:
+Interactive exploration of the impact of a.) Life Expectancy, b). Education and c). GNI per capita on HDI.   
+
+[2014 Human Development Report Data](http://hdr.undp.org/en/data) was obtained from the Human Development Report website.
+
+### Application Instructions:
+Select three human development indicators (X, Y, & bubble size) to generate a bubble chart.
+The bubble chart shows indicator Y as a function of indicator X.  Each bubble represents a country.
+The bubble color indicates world region, and the bubble size corresponds to the value of the third human development indicator.
+
+Hover over a bubble to see the complete information for a country. The chart is moveable, zoom-able, and reactive to your choices. So, go ahead and explore as many indicator combinations as you can think of!
+
+--- .class #id 
+
+## R code to produce a gvisBubbleChart
+```{r load data, echo=FALSE, results='hide'}
+# Read in data
+data <- readRDS("data/HumDevCountryRegion.rds")
+```
+
+
+```{r bchart code, echo=TRUE, results='asis'}
+suppressPackageStartupMessages(library(googleVis))
+# Generate a bubble chart 
+M <- gvisBubbleChart(data = data,idvar= "Country", xvar= "edu.index.2013", 
+                     yvar="HDI.2013",sizevar="GNI.2013", 
+                     colorvar= "PrimaryRegion", options=list(width=1000, height=500,
+                                chartArea = "{top:50}", bubble="{textStyle:{color: 'none'},
+                                        stroke:'none', opacity:0.6}",
+                                hAxis="{title:'Education Index'}",
+                                vAxis="{title:'Human Development Index', maxValue:1.2}",
+                                explorer="{}"
+                                )
+                     )
+```
+
+
+--- .class #id 
+## Example of Bubble Chart
+Hover over a bubble to display country information. The chart is also zoom-able.
+```{r gvbchart, echo=FALSE,results = 'asis'}
+print(M,"chart")
+```
+
+
+
+
+
+
+
+
+
